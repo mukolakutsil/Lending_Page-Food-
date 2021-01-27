@@ -103,4 +103,58 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setClock('.timer', deadline);
 
+    // Modal
+
+
+    const openModalBtn = document.querySelectorAll('[data-modal]'),
+        windowModal = document.querySelector('.modal'),
+        closeModalBtn = document.querySelector('.modal__close');
+
+    let openModal = () => {
+        windowModal.classList.add('show');
+        windowModal.classList.remove('hide');
+        document.body.style.overflow = 'hidden';
+        clearInterval(modalTimer);
+    }, closeModal = () => {
+        windowModal.classList.add('hide');
+        windowModal.classList.remove('show');
+        document.body.style.overflow = '';
+    };
+
+
+    openModalBtn.forEach(btn => {
+        btn.addEventListener('click', openModal);
+    });
+
+    closeModalBtn.addEventListener('click', closeModal);
+
+    windowModal.addEventListener('click', (e) => {
+        if (e.target === windowModal) {
+            closeModal();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.code === "Escape" && windowModal.classList.contains('show')) {
+            closeModal();
+        }
+    });
+
+    const modalTimer = setTimeout(openModal, 5000);
+
+    let showModalByScroll = () => {
+        if (window.pageYOffset + document.documentElement.clientHeight >=
+            document.documentElement.scrollHeight) {
+            openModal();
+            window.removeEventListener('scroll', showModalByScroll);
+        }
+
+        // window.pageYOffset - скільки користувач уже проскролив
+        // document.documentElement.clientHeight - довжина всього документа
+        // document.documentElement.scrollHeight - де ми зараз
+    };
+
+    window.addEventListener('scroll', showModalByScroll);
+
+
 });

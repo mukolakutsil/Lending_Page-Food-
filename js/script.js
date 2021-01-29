@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const modalTimerId = setTimeout(openModal, 300000);
+    const modalTimerId = setTimeout(openModal, 20000);
 
     function showModalByScroll() {
         if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
@@ -242,6 +242,70 @@ document.addEventListener('DOMContentLoaded', () => {
         ".menu .container"
     ).render();
 
+
+    // Slide
+
+    const prev = document.querySelector('.offer__slider-prev'),
+        next = document.querySelector('.offer__slider-next'),
+        currentNum = document.querySelector('#current'),
+        totalNum = document.querySelector('#total'),
+        slides = document.querySelectorAll('.offer__slide');
+
+    let slideIndex = 1;
+
+    const hideSlides = () => {
+        slides.forEach(slide => {
+            slide.classList.add('hide');
+        });
+    };
+
+    const showSlide = (num) => {
+
+        if (num > slides.length) {
+            slideIndex = 1;
+        }
+
+        if (num < 1) {
+            slideIndex = slides.length;
+        }
+
+        hideSlides();
+
+        slides[slideIndex - 1].classList.remove('hide');
+
+        if (slides.length < 10) {
+            currentNum.textContent = `0${slideIndex}`;
+        } else {
+            currentNum.textContent = slideIndex;
+        }
+
+    };
+
+    showSlide(slideIndex);
+
+    if (slides.length < 10) {
+        totalNum.textContent = `0${slides.length}`;
+    } else {
+        totalNum.textContent = slides.length;
+    }
+
+    prev.addEventListener('click', () => {
+
+        slideIndex--;
+        showSlide(slideIndex);
+
+    });
+
+    next.addEventListener('click', () => {
+
+        slideIndex++;
+        showSlide(slideIndex);
+
+    });
+
+
+
+
     // Forms
 
     const forms = document.querySelectorAll('form');
@@ -277,7 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 object[key] = value;
             });
 
-            fetch('../serverw.php', {
+            fetch('../server.php', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -328,6 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
             prevModalDialog.classList.add('show');
             prevModalDialog.classList.remove('hide');
             closeModal();
-        }, 4000);
+        }, 3000);
+
     }
 });
